@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import App from './App'
 import { DataProvider } from './context/DataContext'
 import './styles/global.css'
@@ -8,9 +8,9 @@ import './styles/global.css'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <DataProvider>
-      <BrowserRouter>
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
     </DataProvider>
   </React.StrictMode>
 )
