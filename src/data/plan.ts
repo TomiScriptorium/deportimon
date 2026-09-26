@@ -301,7 +301,7 @@ export const NUTRITION_TIPS = [
   'No necesitas desayunar si no puedes: importa más la proteína total del día.',
   'Legumbres (lentejas, porotos) un par de veces por semana: baratas y con buena proteína.',
   'Antes de entrenar, come algo con proteína y carbohidrato 1-2 horas antes (el pan con huevo sirve).',
-  'Pídele a tu mamá más proteína en el almuerzo: es el cambio que más pesa.',
+  'Suma más proteína en el almuerzo: es el cambio que más pesa.',
 ]
 
 export const HABITS_INFO = {
