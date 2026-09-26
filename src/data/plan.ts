@@ -277,7 +277,7 @@ export const NUTRITION_SLOTS: NutritionSlot[] = [
   },
   {
     time: 'Almuerzo (14-15)',
-    title: 'Lo que cocina tu mamá',
+    title: 'Almuerzo',
     detail: 'Una palma grande de proteína (150-200 g de carne cocida o 3 huevos), la porción habitual de arroz, tallarines o puré y verduras al lado.',
   },
   {
