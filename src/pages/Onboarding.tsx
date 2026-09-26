@@ -7,7 +7,7 @@ import type { UserProfile } from '../types'
 const STEPS = ['bienvenida', 'datos', 'medidas', 'listo'] as const
 
 export function Onboarding() {
-  const { setProfile, addWeightEntry } = useData()
+  const { setProfile, addWeightEntry, addMeasurementEntry } = useData()
   const [step, setStep] = useState(0)
 
   const [name, setName] = useState('')
@@ -45,6 +45,14 @@ export function Onboarding() {
     }
     setProfile(profile)
     addWeightEntry(profile.startWeightKg, profile.startDate, 'Punto de partida')
+    if (parsedWaist || parsedThigh) {
+      addMeasurementEntry({
+        date: profile.startDate,
+        waistCm: parsedWaist,
+        thighCm: parsedThigh,
+        note: 'Punto de partida',
+      })
+    }
   }
 
   return (
