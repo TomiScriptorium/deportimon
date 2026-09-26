@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useData } from './context/DataContext'
 import { Onboarding } from './pages/Onboarding'
@@ -7,11 +7,10 @@ import { Home } from './pages/Home'
 import { RutinaHome } from './pages/RutinaHome'
 import { RoutineDetail } from './pages/RoutineDetail'
 import { PullupPage } from './pages/PullupPage'
+import { Progreso } from './pages/Progreso'
 import { Nutricion } from './pages/Nutricion'
 import { Habitos } from './pages/Habitos'
 import { Perfil } from './pages/Perfil'
-
-const Progreso = lazy(() => import('./pages/Progreso').then((m) => ({ default: m.Progreso })))
 
 export default function App() {
   const { profile, theme } = useData()
@@ -35,14 +34,7 @@ export default function App() {
         <Route path="/rutina" element={<RutinaHome />} />
         <Route path="/rutina/dominadas" element={<PullupPage />} />
         <Route path="/rutina/:routineId" element={<RoutineDetail />} />
-        <Route
-          path="/progreso"
-          element={
-            <Suspense fallback={<div className="page" />}>
-              <Progreso />
-            </Suspense>
-          }
-        />
+        <Route path="/progreso" element={<Progreso />} />
         <Route path="/nutricion" element={<Nutricion />} />
         <Route path="/habitos" element={<Habitos />} />
         <Route path="/perfil" element={<Perfil />} />
