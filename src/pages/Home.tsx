@@ -25,8 +25,11 @@ export function Home() {
   const daysToCheckpoint = daysBetween(today, FIRST_CHECKPOINT_DATE)
 
   const sessionDoneToday = useMemo(
-    () => sessionLogs.some((s) => s.date === today && s.completed),
-    [sessionLogs, today]
+    () =>
+      sessionLogs.some(
+        (s) => s.date === today && s.completed && s.routineId === todayPlan.routineId
+      ),
+    [sessionLogs, today, todayPlan.routineId]
   )
 
   const typeBadge: Record<string, { label: string; className: string }> = {

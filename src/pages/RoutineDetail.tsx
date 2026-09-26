@@ -56,27 +56,23 @@ export function RoutineDetail() {
   }
 
   function toggleSet(exerciseId: string, setIndex: number) {
-    setEntries((prev) => {
-      const current = prev[exerciseId]?.setsCompleted ?? 0
-      const nextCount = current === setIndex + 1 ? setIndex : setIndex + 1
-      const next = {
-        ...prev,
-        [exerciseId]: { ...prev[exerciseId], exerciseId, setsCompleted: nextCount },
-      }
-      persist(next)
-      return next
-    })
+    const current = entries[exerciseId]?.setsCompleted ?? 0
+    const nextCount = current === setIndex + 1 ? setIndex : setIndex + 1
+    const next = {
+      ...entries,
+      [exerciseId]: { ...entries[exerciseId], exerciseId, setsCompleted: nextCount },
+    }
+    setEntries(next)
+    persist(next)
   }
 
   function setWeight(exerciseId: string, weightKg: number | undefined) {
-    setEntries((prev) => {
-      const next = {
-        ...prev,
-        [exerciseId]: { ...prev[exerciseId], exerciseId, setsCompleted: prev[exerciseId]?.setsCompleted ?? 0, weightKg },
-      }
-      persist(next)
-      return next
-    })
+    const next = {
+      ...entries,
+      [exerciseId]: { ...entries[exerciseId], exerciseId, setsCompleted: entries[exerciseId]?.setsCompleted ?? 0, weightKg },
+    }
+    setEntries(next)
+    persist(next)
   }
 
   const totalSets = routine.exercises.reduce((acc, ex) => acc + parseSetCount(ex.scheme), 0)
