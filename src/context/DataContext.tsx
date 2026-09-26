@@ -65,8 +65,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       theme,
       setTheme,
 
-      weightEntries,
+      weightEntries: weightEntries.filter((e) => Number.isFinite(e.weightKg) && e.weightKg > 0),
       addWeightEntry: (weightKg, date, note) => {
+        if (!Number.isFinite(weightKg) || weightKg <= 0) return
         setWeightEntries((prev) => {
           const withoutSameDay = prev.filter((e) => e.date !== date)
           return [...withoutSameDay, { id: makeId(), date, weightKg, note }].sort((a, b) =>

@@ -3,6 +3,7 @@ import { Sheet } from './Sheet'
 import { useData } from '../context/DataContext'
 import { todayISO } from '../utils/date'
 import { resizeImageToDataUrl } from '../utils/image'
+import { parseDecimal } from '../utils/number'
 import { CameraIcon } from './icons'
 
 interface Props {
@@ -38,8 +39,8 @@ export function AddMeasurementSheet({ open, onClose }: Props) {
   function save() {
     addMeasurementEntry({
       date,
-      waistCm: waist ? Number(waist) : undefined,
-      thighCm: thigh ? Number(thigh) : undefined,
+      waistCm: parseDecimal(waist),
+      thighCm: parseDecimal(thigh),
       ...photos,
     })
     setWaist('')
