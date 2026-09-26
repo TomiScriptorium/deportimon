@@ -82,6 +82,8 @@
 
 html, body {
   overscroll-behavior-y: none;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -95,6 +97,7 @@ body {
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 button, input, select, textarea {
@@ -121,9 +124,11 @@ h1, h2, h3, h4, p {
   max-width: 560px;
   margin: 0 auto;
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
-  padding-bottom: calc(78px + var(--safe-bottom));
+  padding-bottom: calc(84px + var(--safe-bottom));
   background: var(--bg);
+  overflow-x: hidden;
 }
 
 /* ---------- Top bar ---------- */
@@ -618,6 +623,7 @@ h1, h2, h3, h4, p {
 /* ---------- Onboarding ---------- */
 .onboarding {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   padding: calc(var(--safe-top) + 24px) 24px calc(24px + var(--safe-bottom));
