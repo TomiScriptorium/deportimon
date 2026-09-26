@@ -32,7 +32,12 @@ interface DataContextValue {
 
   habitLogs: Record<string, HabitDayLog>
   upsertHabitLog: (date: string, patch: Partial<HabitDayLog>) => void
+
+  exportBackup: () => string
+  importBackup: (json: string) => boolean
 }
+
+const BACKUP_VERSION = 1
 
 const DataContext = createContext<DataContextValue | null>(null)
 
@@ -71,8 +76,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     )
   }, [profile, measurementEntries, setMeasurementEntries])
 
-  const value = useMemo<DataContextValue>(
-    () => ({
+  const value = useMemo<DataContextValue>(() => {
+    const cleanWeightEntries = weightEntries.filter(
+      (e) => Number.isFinite(e.weightKg) && e.weightKg > 0
+    )
+
+    return {
       profile,
       setProfile: (p) => setProfileRaw(p),
       clearAll: () => {
@@ -86,7 +95,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       theme,
       setTheme,
 
-      weightEntries: weightEntries.filter((e) => Number.isFinite(e.weightKg) && e.weightKg > 0),
+      weightEntries: cleanWeightEntries,
       addWeightEntry: (weightKg, date, note) => {
         if (!Number.isFinite(weightKg) || weightKg <= 0) return
         setWeightEntries((prev) => {
@@ -128,9 +137,56 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           [date]: { ...(prev[date] ?? { date }), ...patch, date },
         }))
       },
-    }),
-    [profile, theme, weightEntries, measurementEntries, sessionLogs, habitLogs]
-  )
+
+      exportBackup: () =>
+        JSON.stringify(
+          {
+            app: 'deportimon',
+            version: BACKUP_VERSION,
+            exportedAt: new Date().toISOString(),
+            profile,
+            weightEntries: cleanWeightEntries,
+            measurementEntries,
+            sessionLogs,
+            habitLogs,
+            theme,
+          },
+          null,
+          2
+        ),
+
+      importBackup: (json) => {
+        let data: unknown
+        try {
+          data = JSON.parse(json)
+        } catch {
+          return false
+        }
+        if (!data || typeof data !== 'object' || (data as Record<string, unknown>).app !== 'deportimon') {
+          return false
+        }
+        const backup = data as {
+          profile?: UserProfile | null
+          weightEntries?: WeightEntry[]
+          measurementEntries?: MeasurementEntry[]
+          sessionLogs?: SessionLog[]
+          habitLogs?: Record<string, HabitDayLog>
+          theme?: ThemePreference
+        }
+        setProfileRaw(backup.profile ?? null)
+        setWeightEntries(Array.isArray(backup.weightEntries) ? backup.weightEntries : [])
+        setMeasurementEntries(
+          Array.isArray(backup.measurementEntries) ? backup.measurementEntries : []
+        )
+        setSessionLogs(Array.isArray(backup.sessionLogs) ? backup.sessionLogs : [])
+        setHabitLogs(
+          backup.habitLogs && typeof backup.habitLogs === 'object' ? backup.habitLogs : {}
+        )
+        if (backup.theme) setTheme(backup.theme)
+        return true
+      },
+    }
+  }, [profile, theme, weightEntries, measurementEntries, sessionLogs, habitLogs])
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>
 }
