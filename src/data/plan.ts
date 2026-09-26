@@ -172,7 +172,7 @@ export const ROUTINES: Routine[] = [
         id: 'c1',
         name: 'Zancadas cargadas',
         scheme: '3 x 10 por pierna',
-        youtubeId: 'NcfHM8GYEJU',
+        youtubeId: 'ZK3ylQrIbWg',
         cue: 'Paso amplio, rodilla de atrás casi toca el suelo.',
         equipment: 'Barra de 5,7 kg con discos de 5 kg sobre la espalda, o tambor y mancuerna en las manos.',
       },
