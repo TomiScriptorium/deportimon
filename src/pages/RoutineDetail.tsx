@@ -6,6 +6,7 @@ import { ROUTINES } from '../data/plan'
 import { useData } from '../context/DataContext'
 import { todayISO } from '../utils/date'
 import { makeId } from '../utils/id'
+import { parseDecimal } from '../utils/number'
 import type { ExerciseSetLog, RoutineId, SessionLog } from '../types'
 import { CheckIcon } from '../components/icons'
 
@@ -139,7 +140,7 @@ export function RoutineDetail() {
                   inputMode="decimal"
                   placeholder="Ej: 13"
                   value={entries[ex.id]?.weightKg ?? ''}
-                  onChange={(e) => setWeight(ex.id, e.target.value ? Number(e.target.value) : undefined)}
+                  onChange={(e) => setWeight(ex.id, parseDecimal(e.target.value))}
                 />
               </div>
             </div>

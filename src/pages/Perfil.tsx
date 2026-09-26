@@ -2,26 +2,38 @@ import React, { useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { useData } from '../context/DataContext'
 import { formatDateLong } from '../utils/date'
+import { parseDecimal } from '../utils/number'
 
 export function Perfil() {
-  const { profile, setProfile, theme, setTheme, clearAll } = useData()
+  const { profile, setProfile, addWeightEntry, theme, setTheme, clearAll } = useData()
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState(profile?.name ?? '')
   const [age, setAge] = useState(String(profile?.age ?? ''))
   const [heightCm, setHeightCm] = useState(String(profile?.heightCm ?? ''))
+  const [startWeightKg, setStartWeightKg] = useState(
+    profile?.startWeightKg ? String(profile.startWeightKg) : ''
+  )
   const [goal, setGoal] = useState(profile?.goal ?? '')
 
   if (!profile) return null
   const currentProfile = profile
 
   function save() {
+    const parsedAge = parseDecimal(age)
+    const parsedHeight = parseDecimal(heightCm)
+    const parsedWeight = parseDecimal(startWeightKg)
     setProfile({
       ...currentProfile,
       name: name.trim() || currentProfile.name,
-      age: Number(age) || currentProfile.age,
-      heightCm: Number(heightCm) || currentProfile.heightCm,
+      age: parsedAge && parsedAge > 0 ? parsedAge : currentProfile.age,
+      heightCm: parsedHeight && parsedHeight > 0 ? parsedHeight : currentProfile.heightCm,
+      startWeightKg:
+        parsedWeight && parsedWeight > 0 ? parsedWeight : currentProfile.startWeightKg,
       goal: goal.trim(),
     })
+    if (parsedWeight && parsedWeight > 0) {
+      addWeightEntry(parsedWeight, currentProfile.startDate, 'Punto de partida')
+    }
     setEditing(false)
   }
 
@@ -66,7 +78,14 @@ export function Perfil() {
           <div className="card card-tight">
             <Row label="Edad" value={`${currentProfile.age} años`} />
             <Row label="Altura" value={`${currentProfile.heightCm} cm`} />
-            <Row label="Peso inicial" value={`${currentProfile.startWeightKg} kg`} />
+            <Row
+              label="Peso inicial"
+              value={
+                Number.isFinite(currentProfile.startWeightKg)
+                  ? `${currentProfile.startWeightKg} kg`
+                  : 'Sin definir — tócame para editar'
+              }
+            />
             <Row label="Objetivo" value={currentProfile.goal || '—'} />
             <button className="list-row" style={{ width: '100%' }} onClick={() => setEditing(true)}>
               <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 14.5 }}>Editar datos</span>
@@ -87,6 +106,16 @@ export function Perfil() {
                 <label>Altura (cm)</label>
                 <input className="input" inputMode="numeric" value={heightCm} onChange={(e) => setHeightCm(e.target.value)} />
               </div>
+            </div>
+            <div className="field">
+              <label>Peso inicial (kg)</label>
+              <input
+                className="input"
+                inputMode="decimal"
+                placeholder="73.3"
+                value={startWeightKg}
+                onChange={(e) => setStartWeightKg(e.target.value)}
+              />
             </div>
             <div className="field">
               <label>Objetivo</label>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Sheet } from './Sheet'
 import { useData } from '../context/DataContext'
 import { todayISO } from '../utils/date'
+import { parseDecimal } from '../utils/number'
 
 interface Props {
   open: boolean
@@ -14,7 +15,7 @@ export function AddWeightSheet({ open, onClose }: Props) {
   const [date, setDate] = useState(todayISO())
 
   function save() {
-    const n = Number(weight.replace(',', '.'))
+    const n = parseDecimal(weight)
     if (!n || n <= 0) return
     addWeightEntry(n, date)
     setWeight('')

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useData } from '../context/DataContext'
 import { todayISO } from '../utils/date'
+import { parseDecimal } from '../utils/number'
 import type { UserProfile } from '../types'
 
 const STEPS = ['bienvenida', 'datos', 'medidas', 'listo'] as const
 
 export function Onboarding() {
-  const { setProfile, addWeightEntry } = useData()
+  const { setProfile, addWeightEntry, addMeasurementEntry } = useData()
   const [step, setStep] = useState(0)
 
   const [name, setName] = useState('')
@@ -18,24 +19,40 @@ export function Onboarding() {
   const [thighCm, setThighCm] = useState('')
   const [goal, setGoal] = useState('Perder grasa de cintura y muslos y ganar fuerza y músculo')
 
-  const canContinueStep1 = name.trim().length > 0 && age && heightCm
-  const canContinueStep2 = weightKg
+  const parsedAge = parseDecimal(age)
+  const parsedHeight = parseDecimal(heightCm)
+  const parsedWeight = parseDecimal(weightKg)
+
+  const canContinueStep1 =
+    name.trim().length > 0 && !!parsedAge && parsedAge > 0 && !!parsedHeight && parsedHeight > 0
+  const canContinueStep2 = !!parsedWeight && parsedWeight > 0
 
   function finish() {
+    if (!parsedAge || !parsedHeight || !parsedWeight) return
+    const parsedWaist = parseDecimal(waistCm)
+    const parsedThigh = parseDecimal(thighCm)
     const profile: UserProfile = {
       name: name.trim(),
       sex,
-      age: Number(age),
-      heightCm: Number(heightCm),
-      startWeightKg: Number(weightKg),
+      age: parsedAge,
+      heightCm: parsedHeight,
+      startWeightKg: parsedWeight,
       startDate: todayISO(),
-      waistCm: waistCm ? Number(waistCm) : undefined,
-      thighCm: thighCm ? Number(thighCm) : undefined,
+      waistCm: parsedWaist,
+      thighCm: parsedThigh,
       goal: goal.trim(),
       createdAt: new Date().toISOString(),
     }
     setProfile(profile)
     addWeightEntry(profile.startWeightKg, profile.startDate, 'Punto de partida')
+    if (parsedWaist || parsedThigh) {
+      addMeasurementEntry({
+        date: profile.startDate,
+        waistCm: parsedWaist,
+        thighCm: parsedThigh,
+        note: 'Punto de partida',
+      })
+    }
   }
 
   return (

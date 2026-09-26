@@ -17,9 +17,11 @@ export function Home() {
   const today = todayISO()
 
   const lastWeight = weightEntries[weightEntries.length - 1]
-  const startWeight = profile?.startWeightKg ?? lastWeight?.weightKg ?? 0
+  const validStartWeight =
+    profile && Number.isFinite(profile.startWeightKg) ? profile.startWeightKg : undefined
+  const startWeight = validStartWeight ?? lastWeight?.weightKg
   const currentWeight = lastWeight?.weightKg ?? startWeight
-  const delta = currentWeight - startWeight
+  const delta = currentWeight !== undefined && startWeight !== undefined ? currentWeight - startWeight : undefined
 
   const daysIntoProgram = profile ? Math.max(daysSince(profile.startDate), 0) : 0
   const daysToCheckpoint = daysBetween(today, FIRST_CHECKPOINT_DATE)
@@ -71,11 +73,15 @@ export function Home() {
         <WeekStrip todayLabel={todayLabel} />
 
         <div className="stat-grid">
-          <StatCard icon={<ScaleIcon size={16} />} label="Peso actual" value={`${currentWeight} kg`} />
+          <StatCard
+            icon={<ScaleIcon size={16} />}
+            label="Peso actual"
+            value={currentWeight !== undefined ? `${currentWeight} kg` : '—'}
+          />
           <StatCard
             icon={<FlameIcon size={16} />}
             label="Desde inicio"
-            value={`${delta > 0 ? '+' : ''}${delta.toFixed(1)} kg`}
+            value={delta !== undefined ? `${delta > 0 ? '+' : ''}${delta.toFixed(1)} kg` : '—'}
           />
           <StatCard icon={<CalendarIcon size={16} />} label="Día del plan" value={`${daysIntoProgram}`} />
         </div>

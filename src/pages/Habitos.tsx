@@ -3,6 +3,7 @@ import { TopBar } from '../components/TopBar'
 import { useData } from '../context/DataContext'
 import { HABITS_INFO } from '../data/plan'
 import { addDays, formatDateShort, todayISO } from '../utils/date'
+import { parseDecimal } from '../utils/number'
 import { DropIcon, MoonIcon, WalkIcon } from '../components/icons'
 
 export function Habitos() {
@@ -65,7 +66,7 @@ export function Habitos() {
               inputMode="decimal"
               value={log.sleepHours ?? ''}
               onChange={(e) =>
-                upsertHabitLog(today, { sleepHours: e.target.value ? Number(e.target.value) : undefined })
+                upsertHabitLog(today, { sleepHours: parseDecimal(e.target.value) })
               }
               placeholder="7"
             />

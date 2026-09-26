@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { createContext, useContext, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { makeId } from '../utils/id'
 import type {
@@ -50,6 +50,27 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   )
   const [theme, setTheme] = useLocalStorage<ThemePreference>('deportimon.theme', 'system')
 
+  // Backfills the day-1 waist/thigh measurement for accounts created before
+  // onboarding started recording it as a "Medidas mensuales" entry.
+  useEffect(() => {
+    if (!profile) return
+    if (!profile.waistCm && !profile.thighCm) return
+    const hasStartMeasurement = measurementEntries.some((m) => m.date === profile.startDate)
+    if (hasStartMeasurement) return
+    setMeasurementEntries((prev) =>
+      [
+        ...prev,
+        {
+          id: makeId(),
+          date: profile.startDate,
+          waistCm: profile.waistCm,
+          thighCm: profile.thighCm,
+          note: 'Punto de partida',
+        },
+      ].sort((a, b) => a.date.localeCompare(b.date))
+    )
+  }, [profile, measurementEntries, setMeasurementEntries])
+
   const value = useMemo<DataContextValue>(
     () => ({
       profile,
@@ -65,8 +86,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       theme,
       setTheme,
 
-      weightEntries,
+      weightEntries: weightEntries.filter((e) => Number.isFinite(e.weightKg) && e.weightKg > 0),
       addWeightEntry: (weightKg, date, note) => {
+        if (!Number.isFinite(weightKg) || weightKg <= 0) return
         setWeightEntries((prev) => {
           const withoutSameDay = prev.filter((e) => e.date !== date)
           return [...withoutSameDay, { id: makeId(), date, weightKg, note }].sort((a, b) =>
