@@ -80,13 +80,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html {
+  height: 100%;
   overscroll-behavior-y: none;
-  overflow-x: hidden;
   width: 100%;
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   background: var(--bg);
   color: var(--text);
@@ -128,7 +129,6 @@ h1, h2, h3, h4, p {
   position: relative;
   padding-bottom: calc(84px + var(--safe-bottom));
   background: var(--bg);
-  overflow-x: hidden;
 }
 
 /* ---------- Top bar ---------- */
