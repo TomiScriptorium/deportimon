@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { useData } from '../context/DataContext'
-import { formatDateLong } from '../utils/date'
+import { formatDateLong, todayISO } from '../utils/date'
 import { parseDecimal } from '../utils/number'
 
 export function Perfil() {
-  const { profile, setProfile, addWeightEntry, theme, setTheme, clearAll } = useData()
+  const {
+    profile,
+    setProfile,
+    addWeightEntry,
+    theme,
+    setTheme,
+    clearAll,
+    exportBackup,
+    importBackup,
+  } = useData()
   const [editing, setEditing] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [name, setName] = useState(profile?.name ?? '')
   const [age, setAge] = useState(String(profile?.age ?? ''))
   const [heightCm, setHeightCm] = useState(String(profile?.heightCm ?? ''))
@@ -42,6 +52,41 @@ export function Perfil() {
       '¿Seguro que quieres borrar todos tus datos? Esta acción no se puede deshacer.'
     )
     if (ok) clearAll()
+  }
+
+  function handleExport() {
+    const json = exportBackup()
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `deportimon-backup-${todayISO()}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  function handleImportClick() {
+    fileInputRef.current?.click()
+  }
+
+  async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    const ok = window.confirm(
+      'Esto reemplazará todos tus datos actuales por los del archivo de respaldo. ¿Continuar?'
+    )
+    if (!ok) return
+    const text = await file.text()
+    const success = importBackup(text)
+    if (success) {
+      window.alert('Datos importados correctamente.')
+      window.location.reload()
+    } else {
+      window.alert('Ese archivo no parece ser un respaldo válido de Deportimon.')
+    }
   }
 
   return (
@@ -141,6 +186,27 @@ export function Perfil() {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="section-title">Respaldo</div>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <p style={{ fontSize: 12.5, color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+            Tus datos viven solo en este navegador. Descarga un respaldo para no perderlos si
+            cambias de celular o borras el navegador, y luego impórtalo para restaurarlos.
+          </p>
+          <button className="btn btn-secondary" onClick={handleExport}>
+            Exportar mis datos
+          </button>
+          <button className="btn btn-secondary" onClick={handleImportClick}>
+            Importar datos
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json,.json"
+            style={{ display: 'none' }}
+            onChange={handleImportFile}
+          />
         </div>
 
         <div className="section-title">Datos</div>
