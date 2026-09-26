@@ -35,6 +35,7 @@ export interface Exercise {
   scheme: string
   youtubeId: string
   cue?: string
+  equipment?: string
 }
 
 export type RoutineId = 'A' | 'B' | 'C'

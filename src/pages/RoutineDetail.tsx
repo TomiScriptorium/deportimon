@@ -122,6 +122,11 @@ export function RoutineDetail() {
                 </div>
               </div>
               {ex.cue && <div className="exercise-cue">💡 {ex.cue}</div>}
+              {ex.equipment && (
+                <div className="exercise-cue">
+                  <strong>Con qué:</strong> {ex.equipment}
+                </div>
+              )}
               <div className="set-tracker">
                 {Array.from({ length: setCount }).map((_, i) => (
                   <button
