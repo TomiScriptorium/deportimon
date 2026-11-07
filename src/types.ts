@@ -1,3 +1,6 @@
+import type { AnimationId } from './avatar/animations'
+import type { MuscleId } from './data/muscles'
+
 export interface UserProfile {
   name: string
   sex: 'hombre' | 'mujer' | 'otro'
@@ -33,9 +36,16 @@ export interface Exercise {
   id: string
   name: string
   scheme: string
-  youtubeId: string
-  cue?: string
+  anim: AnimationId
+  primary: MuscleId[]
+  secondary?: MuscleId[]
+  steps: string[]
   equipment?: string
+  /** Uses external load, so the card asks for the weight used. */
+  loaded?: boolean
+  youtubeId?: string
+  /** Fallback when there is no specific video: opens a YouTube search. */
+  videoSearch?: string
 }
 
 export type RoutineId = 'A' | 'B' | 'C'

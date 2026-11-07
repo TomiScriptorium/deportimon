@@ -43,7 +43,7 @@ export function RutinaHome() {
           ))}
         </div>
 
-        <div className="section-title">Rutinas de fuerza</div>
+        <div className="section-title">Rutinas · tren superior + abdominales</div>
         <div className="card card-tight">
           {ROUTINES.map((r) => (
             <button key={r.id} className="list-row" style={{ width: '100%' }} onClick={() => navigate(`/rutina/${r.id}`)}>
