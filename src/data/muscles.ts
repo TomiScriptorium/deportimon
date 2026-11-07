@@ -10,6 +10,10 @@ export type MuscleId =
   | 'lumbar'
   | 'abdomen'
   | 'oblicuos'
+  | 'gluteos'
+  | 'cuadriceps'
+  | 'isquios'
+  | 'gemelos'
 
 export const MUSCLE_LABEL: Record<MuscleId, string> = {
   pecho: 'Pecho',
@@ -23,4 +27,8 @@ export const MUSCLE_LABEL: Record<MuscleId, string> = {
   lumbar: 'Zona lumbar',
   abdomen: 'Abdomen',
   oblicuos: 'Oblicuos',
+  gluteos: 'Glúteos',
+  cuadriceps: 'Cuádriceps',
+  isquios: 'Isquiotibiales',
+  gemelos: 'Gemelos',
 }

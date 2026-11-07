@@ -51,6 +51,10 @@ export interface Pose {
   arm2?: LimbSpec
   leg1: LimbSpec
   leg2?: LimbSpec
+  /** Front view only: shortens the torso to suggest leaning toward the viewer (1 = upright). */
+  torsoScale?: number
+  /** Extra foot angle in degrees, e.g. negative to point the toes down for a heel raise. */
+  foot?: number
 }
 
 export type View = 'side' | 'front'
@@ -69,6 +73,8 @@ export interface Skeleton {
   neck: Vec
   head: Vec
   torsoAngle: number
+  torsoScale: number
+  footAngle: number
   /** Direction the chest faces (side view) / the figure's right hand side (front view). */
   normal: Vec
   arm1: Limb
@@ -98,6 +104,8 @@ export function lerpPose(a: Pose, b: Pose, t: number): Pose {
     arm2: lerpLimb(a.arm2 ?? a.arm1, b.arm2 ?? b.arm1, t),
     leg1: lerpLimb(a.leg1, b.leg1, t),
     leg2: lerpLimb(a.leg2 ?? a.leg1, b.leg2 ?? b.leg1, t),
+    torsoScale: lerp(a.torsoScale ?? 1, b.torsoScale ?? 1, t),
+    foot: lerp(a.foot ?? 0, b.foot ?? 0, t),
   }
 }
 
@@ -125,11 +133,13 @@ function solveLimb(root: Vec, spec: LimbSpec, lenA: number, lenB: number, parent
 
 export function solveSkeleton(pose: Pose, view: View): Skeleton {
   const td = dir(pose.torso)
-  const neck = add(pose.hip, td, SEG.torso)
-  const head = add(neck, td, SEG.neck + SEG.headR)
+  const k = pose.torsoScale ?? 1
+  const neck = add(pose.hip, td, SEG.torso * k)
+  // a shortened torso means leaning toward the viewer, so the head drops in front of the chest
+  const head = add(neck, td, (SEG.neck + SEG.headR) * (k < 1 ? k * 0.9 : 1))
   // side view: chest faces the torso direction rotated -90°; front view: figure's right side.
   const normal = dir(pose.torso - 90)
-  const shoulderMid = add(pose.hip, td, SEG.torso * SEG.shoulderT)
+  const shoulderMid = add(pose.hip, td, SEG.torso * k * SEG.shoulderT)
 
   let s1 = shoulderMid
   let s2 = shoulderMid
@@ -157,6 +167,8 @@ export function solveSkeleton(pose: Pose, view: View): Skeleton {
     neck,
     head,
     torsoAngle: pose.torso,
+    torsoScale: k,
+    footAngle: pose.foot ?? 0,
     normal,
     arm1: solveLimb(s1, pose.arm1, SEG.upperArm, SEG.foreArm, pose.torso),
     arm2: solveLimb(s2, shiftIk(arm2Spec, [-2.5, -1.5]), SEG.upperArm, SEG.foreArm, pose.torso),

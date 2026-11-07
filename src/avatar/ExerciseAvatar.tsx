@@ -74,7 +74,7 @@ function seg(key: string, from: Vec, to: Vec, t0: number, t1: number, off: numbe
 
 /** Point in the torso frame: u along hip→neck, v along the skeleton normal. */
 function torsoPoint(s: Skeleton, u: number, v: number): Vec {
-  return add(add(s.hip, dir(s.torsoAngle), u), s.normal, v)
+  return add(add(s.hip, dir(s.torsoAngle), u * s.torsoScale), s.normal, v)
 }
 
 function torsoMuscles(s: Skeleton, muscle: MuscleId, cls: string): React.ReactElement[] {
@@ -96,6 +96,8 @@ function torsoMuscles(s: Skeleton, muscle: MuscleId, cls: string): React.ReactEl
         return [ellipse('tr', P(44, -4), 5, 3.5, a, cls)]
       case 'lumbar':
         return [ellipse('lu', P(7, -6), 7, 3.2, a, cls)]
+      case 'gluteos':
+        return [ellipse('gl', P(-1, -6.5), 7.5, 5.5, a, cls)]
       default:
         return []
     }
@@ -131,6 +133,20 @@ function armMuscles(s: Skeleton, l: Limb, muscle: MuscleId, cls: string, outward
     }
     case 'antebrazos':
       return [seg('fa', l.mid, l.end, 0.08, 0.62, 0, 6, cls)]
+    default:
+      return []
+  }
+}
+
+function legMuscles(s: Skeleton, l: Limb, muscle: MuscleId, cls: string): React.ReactElement[] {
+  const side = s.view === 'side'
+  switch (muscle) {
+    case 'cuadriceps':
+      return [seg('qd', l.root, l.mid, 0.18, 0.82, side ? 3 : 0, side ? 7 : 7.5, cls)]
+    case 'isquios':
+      return side ? [seg('hs', l.root, l.mid, 0.2, 0.84, -3, 6.5, cls)] : []
+    case 'gemelos':
+      return side ? [seg('ca', l.mid, l.end, 0.12, 0.55, -2.4, 6.5, cls)] : []
     default:
       return []
   }
@@ -216,7 +232,7 @@ function foot(l: Limb, s: Skeleton, near: boolean) {
   if (s.view === 'front') {
     return <ellipse key="ft" className={cls} cx={l.end[0]} cy={l.end[1] + 1} rx={5.5} ry={3.6} />
   }
-  const tip = add(l.end, dir(l.bAngle + 90), SEG.foot)
+  const tip = add(l.end, dir(l.bAngle + 90 + s.footAngle), SEG.foot)
   return <line key="ft" className={cls} x1={l.end[0]} y1={l.end[1]} x2={tip[0]} y2={tip[1]} strokeWidth={6.5} />
 }
 
@@ -300,6 +316,10 @@ export function ExerciseAvatar({ anim, primary, secondary = [], label }: Props) 
     groups.flatMap(({ muscles, cls }) =>
       muscles.flatMap((m) => armMuscles(s, l, m, cls, outward)).map((el, i) => React.cloneElement(el, { key: `${keyPrefix}-${cls}-${i}` }))
     )
+  const legOverlay = (l: Limb, keyPrefix: string) =>
+    groups.flatMap(({ muscles, cls }) =>
+      muscles.flatMap((m) => legMuscles(s, l, m, cls)).map((el, i) => React.cloneElement(el, { key: `${keyPrefix}-${cls}-${i}` }))
+    )
   groups.forEach(({ muscles, cls }) =>
     muscles.forEach((m) => torsoMuscles(s, m, cls).forEach((el, i) => torsoOverlay.push(React.cloneElement(el, { key: `t-${cls}-${m}-${i}` }))))
   )
@@ -320,7 +340,11 @@ export function ExerciseAvatar({ anim, primary, secondary = [], label }: Props) 
 
         {/* far side */}
         <g>
-          <g>{limbPath(s.leg2, !side, 'leg')}{foot(s.leg2, s, !side)}</g>
+          <g>
+            {limbPath(s.leg2, !side, 'leg')}
+            {foot(s.leg2, s, !side)}
+            <g style={{ opacity: (side ? 0.55 : 1) * pulse }}>{legOverlay(s.leg2, 'l2')}</g>
+          </g>
           {side && (
             <g>
               {limbPath(s.arm2, false, 'arm')}
@@ -332,12 +356,16 @@ export function ExerciseAvatar({ anim, primary, secondary = [], label }: Props) 
         </g>
 
         {/* body */}
-        <g>{limbPath(s.leg1, true, 'leg')}{foot(s.leg1, s, true)}</g>
+        <g>
+          {limbPath(s.leg1, true, 'leg')}
+          {foot(s.leg1, s, true)}
+        </g>
         {torsoShape(s)}
         <line className="av-body" x1={s.neck[0]} y1={s.neck[1]} x2={s.head[0] - headDir[0] * 6} y2={s.head[1] - headDir[1] * 6} strokeWidth={W.neck} />
         <circle className="av-body" cx={s.head[0]} cy={s.head[1]} r={SEG.headR} />
         {side && <circle className="av-body" cx={nose[0]} cy={nose[1]} r={2.3} />}
         <g style={{ opacity: pulse }}>{torsoOverlay}</g>
+        <g style={{ opacity: pulse }}>{legOverlay(s.leg1, 'l1')}</g>
 
         {!side && (
           <g>

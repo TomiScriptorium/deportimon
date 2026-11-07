@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
 import { ExerciseGuide } from '../components/ExerciseGuide'
-import { ROUTINES } from '../data/plan'
+import { ALL_ROUTINES } from '../data/plan'
 import { useData } from '../context/DataContext'
 import { todayISO } from '../utils/date'
 import { makeId } from '../utils/id'
@@ -19,7 +19,7 @@ export function RoutineDetail() {
   const { routineId } = useParams<{ routineId: string }>()
   const navigate = useNavigate()
   const { sessionLogs, upsertSessionLog } = useData()
-  const routine = ROUTINES.find((r) => r.id === routineId)
+  const routine = ALL_ROUTINES.find((r) => r.id === routineId)
   const today = todayISO()
 
   const existingLog = useMemo(

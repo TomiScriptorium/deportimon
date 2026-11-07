@@ -49,8 +49,8 @@ export const ANIMATIONS = {
 
   bentRow: {
     view: 'side',
-    a: { hip: [92, 101], torso: 35, arm1: fk(-90, -90), leg1: ik(108, 169, -1), leg2: ik(104, 169, -1) },
-    b: { hip: [92, 101], torso: 35, arm1: fk(200, -90), leg1: ik(108, 169, -1), leg2: ik(104, 169, -1) },
+    a: { hip: [92, 101], torso: 35, arm1: fk(-90, -90), leg1: ik(108, 169, 1), leg2: ik(104, 169, 1) },
+    b: { hip: [92, 101], torso: 35, arm1: fk(200, -90), leg1: ik(108, 169, 1), leg2: ik(104, 169, 1) },
     props: [{ kind: 'barbell', size: 'plates' }],
   },
 
@@ -156,6 +156,108 @@ export const ANIMATIONS = {
     view: 'side',
     a: { hip: [100, 162], torso: 118, arm1: ik(70, 168, 1), leg1: fk(18, 12) },
     b: { hip: [100, 162], torso: 108, arm1: ik(70, 168, 1), leg1: fk(62, -40) },
+  },
+  // --- Plan con mancuernas ---------------------------------------------------
+
+  dbRow: {
+    view: 'side',
+    a: { hip: [92, 101], torso: 35, arm1: fk(-90, -90), leg1: ik(108, 169, 1), leg2: ik(104, 169, 1) },
+    b: { hip: [92, 101], torso: 35, arm1: fk(200, -90), leg1: ik(108, 169, 1), leg2: ik(104, 169, 1) },
+    props: [{ kind: 'dumbbell', hands: 'both' }],
+  },
+
+  curlDb: { view: 'side', a: curlA, b: curlB, props: [{ kind: 'dumbbell', hands: 'both' }] },
+
+  ohpDb: {
+    view: 'side',
+    a: { ...standing, arm1: fk(-62, 100) },
+    b: { ...standing, arm1: fk(86, 89) },
+    props: [{ kind: 'dumbbell', hands: 'both' }],
+  },
+
+  pullover: {
+    view: 'side',
+    a: { hip: [122, 160], torso: 180, arm1: fk(166, 166), ...lyingKneesUp },
+    b: { hip: [122, 160], torso: 180, arm1: fk(92, 92), ...lyingKneesUp },
+    props: [{ kind: 'dumbbell', hands: 'near' }],
+  },
+
+  squatDb: {
+    view: 'side',
+    a: { hip: [100, 97], torso: 90, arm1: rel(-165, 175), leg1: ik(99, 169, 1), leg2: ik(97, 169, 1) },
+    b: { hip: [76, 132], torso: 58, arm1: rel(-165, 175), leg1: ik(99, 169, 1), leg2: ik(97, 169, 1) },
+    props: [{ kind: 'dumbbell', hands: 'near' }],
+  },
+
+  rdl: {
+    view: 'side',
+    a: { hip: [100, 97], torso: 90, arm1: fk(-90, -90), leg1: ik(100, 169, 1), leg2: ik(98, 169, 1) },
+    b: { hip: [86, 101], torso: 22, arm1: fk(-90, -90), leg1: ik(100, 169, 1), leg2: ik(98, 169, 1) },
+    props: [{ kind: 'dumbbell', hands: 'both' }],
+  },
+
+  lunge: {
+    view: 'side',
+    a: { hip: [98, 99], torso: 90, arm1: fk(-90, -90), leg1: ik(124, 169, 1), leg2: ik(70, 167, 1), foot: 0 },
+    b: { hip: [97, 128], torso: 90, arm1: fk(-90, -90), leg1: ik(124, 169, 1), leg2: ik(70, 167, 1), foot: 0 },
+    props: [{ kind: 'dumbbell', hands: 'both' }],
+  },
+
+  calfRaise: {
+    view: 'side',
+    durationMs: 2200,
+    a: { hip: [100, 97], torso: 90, arm1: fk(-90, -90), leg1: fk(-90, -90), leg2: fk(-89, -89) },
+    b: { hip: [100, 90], torso: 90, arm1: fk(-90, -90), leg1: fk(-90, -90), leg2: fk(-89, -89), foot: -50 },
+    props: [{ kind: 'dumbbell', hands: 'both' }],
+  },
+
+  gluteBridge: {
+    view: 'side',
+    a: { hip: [120, 160], torso: 180, arm1: fk(-3, -1), leg1: ik(150, 168, 1) },
+    b: { hip: [118, 140], torso: 205.8, arm1: fk(-5, -2), leg1: ik(150, 168, 1) },
+  },
+
+  declinePushup: {
+    view: 'side',
+    a: { hip: [99, 124.5], torso: 9, arm1: ik(140.9, 169.5, -1), leg1: ik(29, 134, 1) },
+    b: { hip: [99, 144.2], torso: -8, arm1: ik(140.9, 169.5, -1), leg1: ik(29, 134, 1) },
+    props: [{ kind: 'box', x: 8, y: 140, w: 34 }],
+  },
+
+  reverseFly: {
+    view: 'front',
+    a: {
+      hip: [100, 97.5],
+      torso: 90,
+      torsoScale: 0.4,
+      leg1: fk(-96, -93),
+      leg2: fk(-84, -87),
+      arm1: fk(-100, -95),
+      arm2: fk(-80, -85),
+    },
+    b: {
+      hip: [100, 97.5],
+      torso: 90,
+      torsoScale: 0.4,
+      leg1: fk(-96, -93),
+      leg2: fk(-84, -87),
+      arm1: fk(170, 185),
+      arm2: fk(10, -5),
+    },
+    props: [{ kind: 'dumbbell', hands: 'both' }],
+  },
+
+  bulgarianSquat: {
+    view: 'side',
+    a: { hip: [94, 99], torso: 86, arm1: fk(-90, -90), leg1: ik(122, 169, 1), leg2: ik(52, 133, 1), foot: -60 },
+    b: { hip: [92, 126], torso: 80, arm1: fk(-90, -90), leg1: ik(122, 169, 1), leg2: ik(52, 133, 1), foot: -60 },
+    props: [{ kind: 'dumbbell', hands: 'both' }, { kind: 'box', x: 28, y: 138, w: 34 }],
+  },
+
+  bicycleCrunch: {
+    view: 'side',
+    a: { hip: [120, 160], torso: 162, arm1: rel(-15, 135), leg1: ik(146, 140, 1), leg2: fk(10, 6) },
+    b: { hip: [120, 160], torso: 150, arm1: rel(-15, 135), leg1: fk(10, 6), leg2: ik(143, 138, 1) },
   },
 } satisfies Record<string, AnimationDef>
 
