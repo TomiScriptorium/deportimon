@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
-import { YouTubePlayer } from '../components/YouTubePlayer'
+import { ExerciseGuide } from '../components/ExerciseGuide'
 import { ROUTINES } from '../data/plan'
 import { useData } from '../context/DataContext'
 import { todayISO } from '../utils/date'
@@ -114,19 +114,7 @@ export function RoutineDetail() {
           const doneCount = entries[ex.id]?.setsCompleted ?? 0
           return (
             <div key={ex.id} className="exercise-card">
-              <YouTubePlayer youtubeId={ex.youtubeId} title={ex.name} />
-              <div className="exercise-head">
-                <div>
-                  <div className="exercise-name">{ex.name}</div>
-                  <div className="exercise-scheme">{ex.scheme}</div>
-                </div>
-              </div>
-              {ex.cue && <div className="exercise-cue">💡 {ex.cue}</div>}
-              {ex.equipment && (
-                <div className="exercise-cue">
-                  <strong>Con qué:</strong> {ex.equipment}
-                </div>
-              )}
+              <ExerciseGuide ex={ex} />
               <div className="set-tracker">
                 {Array.from({ length: setCount }).map((_, i) => (
                   <button
@@ -138,16 +126,18 @@ export function RoutineDetail() {
                   </button>
                 ))}
               </div>
-              <div className="field">
-                <label>Peso usado (kg) · opcional</label>
-                <input
-                  className="input"
-                  inputMode="decimal"
-                  placeholder="Ej: 13"
-                  value={entries[ex.id]?.weightKg ?? ''}
-                  onChange={(e) => setWeight(ex.id, parseDecimal(e.target.value))}
-                />
-              </div>
+              {ex.loaded && (
+                <div className="field">
+                  <label>Peso usado (kg) · opcional</label>
+                  <input
+                    className="input"
+                    inputMode="decimal"
+                    placeholder="Ej: 13"
+                    value={entries[ex.id]?.weightKg ?? ''}
+                    onChange={(e) => setWeight(ex.id, parseDecimal(e.target.value))}
+                  />
+                </div>
+              )}
             </div>
           )
         })}

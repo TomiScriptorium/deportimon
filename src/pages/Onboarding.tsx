@@ -67,12 +67,12 @@ export function Onboarding() {
         <>
           <h1>Hola 👋<br />Bienvenido a Deportimon</h1>
           <p className="lead">
-            Tu app personal de recomposición corporal: rutina de fuerza, videos de cada
-            ejercicio, registro de peso y hábitos, todo en un solo lugar.
+            Tu app personal de recomposición corporal: rutinas de tren superior y abdominales,
+            registro de peso y hábitos, todo en un solo lugar.
           </p>
           <div className="onboarding-body">
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <Bullet text="3 rutinas de fuerza por semana, con video de cada ejercicio" />
+              <Bullet text="3 rutinas de tren superior y abdominales por semana, con un avatar animado que muestra cada ejercicio y el músculo que trabaja" />
               <Bullet text="Registro de peso y medidas con gráfico de progreso" />
               <Bullet text="Guía de alimentación y hábitos de sueño, agua y cardio" />
             </div>
@@ -161,8 +161,8 @@ export function Onboarding() {
         <>
           <h1>Todo listo, {name.split(' ')[0]} 🎉</h1>
           <p className="lead">
-            Tu plan de 3 sesiones de fuerza por semana ya está cargado, con video de cada
-            ejercicio. Vamos a registrar tu progreso mes a mes.
+            Tu plan de 3 sesiones de tren superior y abdominales por semana ya está cargado.
+            Vamos a registrar tu progreso mes a mes.
           </p>
           <div className="onboarding-body">
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

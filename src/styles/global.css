@@ -28,6 +28,17 @@
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --tabbar-h: 58px;
+  --avatar-bg-top: #F8F8FB;
+  --avatar-bg-bottom: #ECECF2;
+  --avatar-body: #C4CAD4;
+  --avatar-body-far: #ABB2BE;
+  --avatar-gear: #2C3038;
+  --avatar-furniture: #CDBBA5;
+  --avatar-floor: #D2D2DA;
+  --muscle-secondary: #FFB59C;
+  --map-body: #E2E5EA;
+  --map-muscle: #CBD0D8;
+  --map-line: #F5F6F9;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,6 +60,28 @@
     --red-soft: rgba(255, 69, 58, 0.16);
     --separator: rgba(84, 84, 88, 0.32);
     --nav-blur-bg: rgba(20, 20, 22, 0.75);
+  --avatar-bg-top: #1F1F23;
+  --avatar-bg-bottom: #161619;
+  --avatar-body: #5E646E;
+  --avatar-body-far: #484D56;
+  --avatar-gear: #D7DBE2;
+  --avatar-furniture: #6F604F;
+  --avatar-floor: #3A3A41;
+  --muscle-secondary: #A04E36;
+  --map-body: #34373D;
+  --map-muscle: #4A4F58;
+  --map-line: #1C1C1E;
+    --avatar-bg-top: #1F1F23;
+    --avatar-bg-bottom: #161619;
+    --avatar-body: #5E646E;
+    --avatar-body-far: #484D56;
+    --avatar-gear: #D7DBE2;
+    --avatar-furniture: #6F604F;
+    --avatar-floor: #3A3A41;
+    --muscle-secondary: #A04E36;
+    --map-body: #34373D;
+    --map-muscle: #4A4F58;
+    --map-line: #1C1C1E;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
@@ -773,3 +806,104 @@ h1, h2, h3, h4, p {
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* ---------- Exercise avatar ---------- */
+.avatar-stage {
+  background: linear-gradient(180deg, var(--avatar-bg-top), var(--avatar-bg-bottom));
+  border-radius: var(--radius-md);
+  padding: 4px 2px 0;
+}
+
+.avatar-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.av-body { fill: var(--avatar-body); stroke: var(--avatar-body); stroke-linecap: round; stroke-linejoin: round; }
+.av-body-far { fill: var(--avatar-body-far); stroke: var(--avatar-body-far); stroke-linecap: round; stroke-linejoin: round; }
+.av-muscle-1 { fill: var(--accent); stroke: var(--accent); stroke-linecap: round; }
+.av-muscle-2 { fill: var(--muscle-secondary); stroke: var(--muscle-secondary); stroke-linecap: round; }
+.av-gear { fill: var(--avatar-gear); }
+.av-gear-hub { fill: var(--avatar-body); }
+.av-furniture rect { fill: var(--avatar-furniture); }
+.av-floor { stroke: var(--avatar-floor); stroke-width: 1.6; stroke-linecap: round; }
+
+/* ---------- Muscle map ---------- */
+.muscle-map svg { display: block; width: 100%; height: auto; }
+.mm-body { fill: var(--map-body); }
+.mm-0, .mm-1, .mm-2 { stroke: var(--map-line); stroke-width: 0.8; stroke-linejoin: round; }
+.mm-0 { fill: var(--map-muscle); }
+.mm-1 { fill: var(--accent); }
+.mm-2 { fill: var(--muscle-secondary); }
+.muscle-map-caption {
+  display: flex;
+  justify-content: space-around;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* ---------- Exercise guide ---------- */
+.muscle-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 46%) 1fr;
+  gap: 12px;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 10px 12px 8px;
+}
+
+.muscle-legend { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.muscle-legend-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
+}
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chip-1 { background: var(--accent); color: #fff; }
+.chip-2 { background: var(--accent-soft); color: var(--accent); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.steps li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.step-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.video-toggle { align-self: flex-start; }
