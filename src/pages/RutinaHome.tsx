@@ -4,6 +4,8 @@ import { TopBar } from '../components/TopBar'
 import {
   BAR_LOADING_TABLE,
   CARDIO_VIDEOS,
+  DUMBBELL_PLAN,
+  DUMBBELL_ROUTINES,
   EQUIPMENT_NOTES,
   MINIMAL_SESSION,
   PROGRESSION_TIPS,
@@ -96,6 +98,42 @@ export function RutinaHome() {
             </div>
             <ChevronRightIcon />
           </button>
+        </div>
+
+        <div className="section-title">{DUMBBELL_PLAN.title}</div>
+        <div className="exercise-card">
+          <div className="exercise-cue">{DUMBBELL_PLAN.detail}</div>
+          <YouTubePlayer youtubeId={DUMBBELL_PLAN.youtubeId} title={DUMBBELL_PLAN.title} />
+        </div>
+        <div className="card card-tight">
+          {DUMBBELL_ROUTINES.map((r) => (
+            <button key={r.id} className="list-row" style={{ width: '100%' }} onClick={() => navigate(`/rutina/${r.id}`)}>
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 12,
+                  background: 'var(--green-soft)',
+                  color: 'var(--green)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: 15,
+                  flexShrink: 0,
+                }}
+              >
+                {r.title.replace('Día ', 'D')}
+              </div>
+              <div className="list-row-main" style={{ textAlign: 'left' }}>
+                <div className="list-row-title">{r.title} · {r.subtitle}</div>
+                <div className="list-row-sub">
+                  {r.exercises.map((e) => e.name).join(' · ')}
+                </div>
+              </div>
+              <ChevronRightIcon />
+            </button>
+          ))}
         </div>
 
         <div className="section-title">Sesión mínima (días complicados)</div>

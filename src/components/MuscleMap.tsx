@@ -27,7 +27,7 @@ const FRONT: Region[] = [
   ...sym('abdomen', 'M44,56 L49,56 L49,64 L44,64 Z'),
   ...sym('abdomen', 'M44,66 L49,66 L49,74 L44,74 Z'),
   ...sym('abdomen', 'M44,76 L49,76 L49,87 L45,88 C44,86 44,80 44,76 Z'),
-  ...sym(undefined, 'M38,100 C37,112 39,126 42,138 L48,138 C49,126 49,112 48,102 Z'),
+  ...sym('cuadriceps', 'M38,100 C37,112 39,126 42,138 L48,138 C49,126 49,112 48,102 Z'),
   ...sym(undefined, 'M42,148 C40,158 41,170 43,180 L47,180 C48,170 48,158 47,148 Z'),
 ]
 
@@ -39,9 +39,9 @@ const BACK: Region[] = [
   ...sym('antebrazos', 'M24,70 C22,77 21,84 21,92 L24,92 C26,85 28,78 29,72 Z'),
   ...sym('dorsales', 'M35,40 L41,42 L42,55 L48,60 C46,66 44,72 41,76 C37,68 35,58 34,48 Z'),
   ...sym('lumbar', 'M44,62 L49,61 L49,86 L44,84 C43,78 43,70 44,62 Z'),
-  ...sym(undefined, 'M37,90 C36,96 39,102 45,104 C48,103 49,99 49,94 L49,88 Z'),
-  ...sym(undefined, 'M38,106 C37,118 39,130 42,140 L48,140 C49,128 49,116 48,108 Z'),
-  ...sym(undefined, 'M41,148 C39,158 41,168 43,178 L47,178 C48,168 48,158 47,148 Z'),
+  ...sym('gluteos', 'M37,90 C36,96 39,102 45,104 C48,103 49,99 49,94 L49,88 Z'),
+  ...sym('isquios', 'M38,106 C37,118 39,130 42,140 L48,140 C49,128 49,116 48,108 Z'),
+  ...sym('gemelos', 'M41,148 C39,158 41,168 43,178 L47,178 C48,168 48,158 47,148 Z'),
 ]
 
 function Figure({ regions, primary, secondary, x }: { regions: Region[]; primary: MuscleId[]; secondary: MuscleId[]; x: number }) {

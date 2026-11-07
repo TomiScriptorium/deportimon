@@ -48,7 +48,7 @@ export interface Exercise {
   videoSearch?: string
 }
 
-export type RoutineId = 'A' | 'B' | 'C'
+export type RoutineId = 'A' | 'B' | 'C' | 'M1' | 'M2' | 'M3' | 'M4'
 
 export interface Routine {
   id: RoutineId
